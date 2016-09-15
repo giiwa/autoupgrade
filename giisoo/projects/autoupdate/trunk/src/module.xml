@@ -4,7 +4,7 @@
   <id>227</id>
   <name>autoupgrade</name>
   <package>org.giiwa.autoupgrade.web</package>
-  <screenshot>/images/demo_screenshot.png</screenshot>
+  <screenshot>/images/autoupgrade_screenshot.png</screenshot>
   <version>1.0.1</version>
   <build>0</build>
   <enabled>true</enabled>
