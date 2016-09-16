@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module version="1.0">
+  <id>2</id>
+  <name>autoupgrade</name>
+  <package>org.giiwa.autoupgrade.web</package>
+  <screenshot>/images/autoupgrade_screenshot.png</screenshot>
+  <version>1.0.1</version>
+  <build>1609161836</build>
+  <enabled>true</enabled>
+  <readme>autoupgrade module</readme>
+  <listener>
+    <class>org.giiwa.autoupgrade.web.AutoupgradeListener</class>
+  </listener>
+  <setting>
+  </setting>
+  <filter>
+  </filter>
+  <depends>
+  </depends>
+</module>
