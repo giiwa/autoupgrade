@@ -114,7 +114,7 @@ public class AutoupgradeListener implements IListener {
         }
 
         if (restart) {
-          OpLog.info(autoupgrade.class, "restart", "autoupgrade shutdown the server", null, null);
+          OpLog.warn(autoupgrade.class, "restart", "autoupgrade shutdown the server", null, null);
           System.exit(0);
         }
       }
