@@ -53,8 +53,12 @@ public class AutoupgradeListener implements IListener {
 
   private static class AutoupdateTask extends Task {
 
+    long interval = X.AHOUR;
+
     @Override
     public void onExecute() {
+      interval = X.AHOUR;
+
       String modules = Global.getString("autoupgrade." + Model.node() + ".modules", null);
       String url = Global.getString("autoupgrade.url", null);
 
@@ -80,25 +84,32 @@ public class AutoupgradeListener implements IListener {
           Response r = Http.post(url, jo);
           log.info("remote module=" + s + ", resp=" + r.body);
 
-          OpLog.info(autoupgrade.class, "check", "name=" + s + ", resp=" + r.body, null, null);
-
           JSON j1 = JSON.fromObject(r.body);
-          if (j1.getInt(X.STATE) == 200) {
+          if (j1 != null && j1.getInt(X.STATE) == 200) {
             Module m = Module.load(s);
             if (m == null || !X.isSame(m.getVersion(), j1.getString("version"))
                 || !X.isSame(m.getBuild(), j1.getString("build"))) {
 
               File f = _download(url, j1.getString("uri"), j1.getString("md5"));
               if (f != null) {
+
                 OpLog.info(autoupgrade.class, "download", f.getName(), null, null);
+
                 String name = j1.getString("uri");
                 int i = name.lastIndexOf("/");
                 name = name.substring(i + 1);
                 if (_upgrade(name, f)) {
                   restart = true;
                 }
+              } else {
+                // download error
+                interval = X.AMINUTE;
               }
+            } else {
+              OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null, null);
             }
+          } else {
+            OpLog.warn(autoupgrade.class, "check", "[" + s + "], got=" + r.body, null, url);
           }
         }
 
@@ -113,10 +124,11 @@ public class AutoupgradeListener implements IListener {
       try {
         String id = Repo.store(name, f);
         boolean restart = Module.install(Repo.load(id));
-        OpLog.info(autoupgrade.class, "upgrade", "upgrade success, name=" + f.getName(), null, null);
+        OpLog.info(autoupgrade.class, "upgrade", "success, name=" + name, null, null);
         return restart;
       } catch (Exception e) {
-        OpLog.warn(autoupgrade.class, "upgrade", "upgrade failed, name=" + f.getName(), null, null);
+        interval = X.AMINUTE;
+        OpLog.warn(autoupgrade.class, "upgrade", "failed, name=" + name, null, null);
       }
       return false;
     }
@@ -147,7 +159,7 @@ public class AutoupgradeListener implements IListener {
 
     @Override
     public void onFinish() {
-      this.schedule(X.AHOUR);
+      this.schedule(interval);
     }
 
   }

@@ -15,6 +15,7 @@
 			<th class='type'>$lang.get('log.type')</th>
 			<th class='system'>$lang.get('log.node')</th>
 			<th class='op'>$lang.get('log.op')</th>
+			<th class='op'>$lang.get('log.ip')</th>
 			<th class='breif' style='width: 30%'>$lang.get('log.message')</th>
 		</tr>
 	</thead>
@@ -25,6 +26,7 @@
 			<td class='type'>#if($f.type)$lang.get("log.type_$f.type")#end</td>
 			<td>$!f.node</td>
 			<td>$f.op</td>
+			<td>$!f.ip</td>
 			<td #if($f.trace) onclick='_showmore(this);' class='more' #end> 
 				$!f.message
 				<div class='more'>$!f.trace</div>
