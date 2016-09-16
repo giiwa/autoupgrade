@@ -15,7 +15,7 @@ public class autoupgrade extends Model {
     int s = this.getInt("s");
     int n = this.getInt("n", 20, "number.per.page");
 
-    W q = W.create("model", "admin.autoupgrade");
+    W q = W.create("model", "admin.autoupgrade").sort("created", -1);
 
     Beans<OpLog> bs = OpLog.load(q, s, n);
     this.set(bs, s, n);
