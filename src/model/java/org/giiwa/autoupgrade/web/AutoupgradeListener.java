@@ -40,8 +40,12 @@ public class AutoupgradeListener implements IListener {
 
   static Log log = LogFactory.getLog(AutoupgradeListener.class);
 
-  /* (non-Javadoc)
-   * @see org.giiwa.framework.web.IListener#onStart(org.apache.commons.configuration.Configuration, org.giiwa.framework.web.Module)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * org.giiwa.framework.web.IListener#onStart(org.apache.commons.configuration.
+   * Configuration, org.giiwa.framework.web.Module)
    */
   @Override
   public void onStart(Configuration conf, Module m) {
@@ -52,7 +56,9 @@ public class AutoupgradeListener implements IListener {
 
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.giiwa.framework.web.IListener#onStop()
    */
   @Override
@@ -60,8 +66,11 @@ public class AutoupgradeListener implements IListener {
 
   }
 
-  /* (non-Javadoc)
-   * @see org.giiwa.framework.web.IListener#uninstall(org.apache.commons.configuration.Configuration, org.giiwa.framework.web.Module)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.giiwa.framework.web.IListener#uninstall(org.apache.commons.
+   * configuration.Configuration, org.giiwa.framework.web.Module)
    */
   @Override
   public void uninstall(Configuration conf, Module m) {
@@ -69,8 +78,12 @@ public class AutoupgradeListener implements IListener {
 
   }
 
-  /* (non-Javadoc)
-   * @see org.giiwa.framework.web.IListener#upgrade(org.apache.commons.configuration.Configuration, org.giiwa.framework.web.Module)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * org.giiwa.framework.web.IListener#upgrade(org.apache.commons.configuration.
+   * Configuration, org.giiwa.framework.web.Module)
    */
   @Override
   public void upgrade(Configuration conf, Module m) {
@@ -106,6 +119,8 @@ public class AutoupgradeListener implements IListener {
         String[] ss = modules.split("[,， ]");
         boolean restart = false;
         for (String s : ss) {
+          if (X.isEmpty(s))
+            continue;
           JSON jo = JSON.create();
           jo.put("name", s);
           Response r = Http.post(url, jo);
