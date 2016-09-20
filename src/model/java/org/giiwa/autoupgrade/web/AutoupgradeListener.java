@@ -100,8 +100,8 @@ public class AutoupgradeListener implements IListener {
       interval = X.AHOUR;
 
       String modules = Global.getString("autoupgrade." + Model.node() + ".modules", null);
-      String url = Global.getString("autoupgrade.url", null);
-
+      String upgradeurl = Global.getString("autoupgrade.url", null);
+      String url = upgradeurl;
       if (!X.isEmpty(url) && !X.isEmpty(modules)) {
         while (url.startsWith("/")) {
           url = url.substring(1);
@@ -135,7 +135,7 @@ public class AutoupgradeListener implements IListener {
               File f = _download(url, j1.getString("uri"), j1.getString("md5"));
               if (f != null) {
 
-                OpLog.info(autoupgrade.class, "download", f.getName(), null, null);
+                OpLog.info(autoupgrade.class, "download", f.getName(), null, upgradeurl);
 
                 String name = j1.getString("uri");
                 int i = name.lastIndexOf("/");
@@ -148,15 +148,15 @@ public class AutoupgradeListener implements IListener {
                 interval = X.AMINUTE;
               }
             } else {
-              OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null, null);
+              OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null, upgradeurl);
             }
           } else {
-            OpLog.warn(autoupgrade.class, "check", "[" + s + "], got=" + r.body, null, url);
+            OpLog.warn(autoupgrade.class, "check", "[" + s + "], got=" + r.body, null, upgradeurl);
           }
         }
 
         if (restart) {
-          OpLog.warn(autoupgrade.class, "restart", "autoupgrade shutdown the server", null, null);
+          OpLog.warn(autoupgrade.class, "restart", "autoupgrade shutdown the server", null, upgradeurl);
           System.exit(0);
         }
       }
