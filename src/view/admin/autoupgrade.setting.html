@@ -10,7 +10,7 @@
 
 <form action='/admin/autoupgrade/setting'  method='post' class='form' enctype="multipart/form-data">
 	<div><label><h3>$lang.get('autoupgrade.url'):</h3><input type='text' name='url' value="$!global.getString('autoupgrade.url', '')"/><g>$lang.get('autoupgrade.url.hint')</g></label></div>
-	<div><label><h3>$lang.get('autoupgrade.modules'):</h3><input type='text' name='modules' value="$!modules"/><g>$lang.get('autoupgrade.modules.hint')</g></label></div>
+	<div><label><h3>$lang.get('autoupgrade.modules'):</h3><input type='text' style='width:60%' name='modules' value="$!modules"/><g>$lang.get('autoupgrade.modules.hint')</g></label></div>
 	
 	<button type='submit'>$lang.get('btn.save')</button>
 </form>
