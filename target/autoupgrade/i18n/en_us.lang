@@ -6,3 +6,4 @@ autoupgrade.url=autoupgrade server url
 menu.autoupgrade=Autoupgrade
 autoupgrade.url.hint=The modules server url, http://...
 autoupgrade.modules.hint=the modules, split by ","
+autoupgrade.enabled=Enabled

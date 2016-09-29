@@ -6,3 +6,4 @@ autoupgrade.url=升级服务器URL(http://...)
 menu.autoupgrade=自动升级
 autoupgrade.url.hint=模块服务器, http://...
 autoupgrade.modules.hint=模块名, 用 "," 分隔
+autoupgrade.enabled=开启
