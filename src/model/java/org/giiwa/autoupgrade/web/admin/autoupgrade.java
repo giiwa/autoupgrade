@@ -25,7 +25,9 @@ import org.giiwa.framework.web.Path;
 // TODO: Auto-generated Javadoc
 public class autoupgrade extends Model {
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.giiwa.framework.web.Model#onGet()
    */
   @Path(login = true, access = "access.config.admin")
@@ -47,6 +49,7 @@ public class autoupgrade extends Model {
   @Path(path = "setting", login = true, access = "access.config.admin")
   public void setting() {
     if (method.isPost()) {
+      Global.setConfig("autoupgrade.enabled", X.isSame("on", this.getString("enabled")) ? "on" : "off");
       Global.setConfig("autoupgrade.url", this.getString("url"));
       Global.setConfig("autoupgrade." + Model.node() + ".modules", this.getString("modules"));
 
