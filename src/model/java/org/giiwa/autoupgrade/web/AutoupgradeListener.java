@@ -52,7 +52,9 @@ public class AutoupgradeListener implements IListener {
 
     log.info("autoupgrade is starting ...");
 
-    new AutoupdateTask().schedule(X.AMINUTE);
+    if (X.isSame("on", Global.getString("autoupgrade.enabled", X.EMPTY))) {
+      new AutoupdateTask().schedule(X.AMINUTE);
+    }
 
   }
 
@@ -148,7 +150,8 @@ public class AutoupgradeListener implements IListener {
                 interval = X.AMINUTE;
               }
             } else {
-              OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null, upgradeurl);
+              OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null,
+                  upgradeurl);
             }
           } else {
             OpLog.warn(autoupgrade.class, "check", "[" + s + "], got=" + r.body, null, upgradeurl);
