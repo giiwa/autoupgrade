@@ -6,7 +6,7 @@
   <package>org.giiwa.autoupgrade.web</package>
   <screenshot>/images/autoupgrade_screenshot.png</screenshot>
   <version>1.0.1</version>
-  <build>1609291859</build>
+  <build>1609291908</build>
   <enabled>true</enabled>
   <readme>autoupgrade module</readme>
   <listener>
