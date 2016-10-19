@@ -22,7 +22,6 @@ import org.giiwa.framework.bean.OpLog;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Path;
 
-// TODO: Auto-generated Javadoc
 public class autoupgrade extends Model {
 
   /*

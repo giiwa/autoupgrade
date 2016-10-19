@@ -15,6 +15,7 @@
 package org.giiwa.autoupgrade.web;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.logging.Log;
@@ -35,7 +36,6 @@ import org.giiwa.framework.web.IListener;
 import org.giiwa.framework.web.Model;
 import org.giiwa.framework.web.Module;
 
-// TODO: Auto-generated Javadoc
 public class AutoupgradeListener implements IListener {
 
   static Log log = LogFactory.getLog(AutoupgradeListener.class);
@@ -130,28 +130,59 @@ public class AutoupgradeListener implements IListener {
 
           JSON j1 = JSON.fromObject(r.body);
           if (j1 != null && j1.getInt(X.STATE) == 200) {
-            Module m = Module.load(s);
-            if (m == null || !X.isSame(m.getVersion(), j1.getString("version"))
-                || !X.isSame(m.getBuild(), j1.getString("build"))) {
 
-              File f = _download(url, j1.getString("uri"), j1.getString("md5"));
-              if (f != null) {
+            if (X.isSame("*", j1.getString("name"))) {
+              List<JSON> list = j1.getList("list");
+              for (JSON j2 : list) {
 
-                OpLog.info(autoupgrade.class, "download", f.getName(), null, upgradeurl);
+                Module m = Module.load(j2.getString("name"));
+                if (m == null || !X.isSame(m.getVersion(), j2.getString("version"))
+                    || !X.isSame(m.getBuild(), j2.getString("build"))) {
 
-                String name = j1.getString("uri");
-                int i = name.lastIndexOf("/");
-                name = name.substring(i + 1);
-                if (_upgrade(name, f)) {
-                  restart = true;
+                  File f = _download(url, j2.getString("uri"), j2.getString("md5"));
+                  if (f != null) {
+
+                    OpLog.info(autoupgrade.class, "download", f.getName(), null, upgradeurl);
+
+                    String name = j2.getString("uri");
+                    int i = name.lastIndexOf("/");
+                    name = name.substring(i + 1);
+                    if (_upgrade(name, f)) {
+                      restart = true;
+                    }
+                  } else {
+                    // download error
+                    interval = X.AMINUTE;
+                  }
+                } else {
+                  OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null,
+                      upgradeurl);
                 }
-              } else {
-                // download error
-                interval = X.AMINUTE;
               }
             } else {
-              OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null,
-                  upgradeurl);
+              Module m = Module.load(s);
+              if (m == null || !X.isSame(m.getVersion(), j1.getString("version"))
+                  || !X.isSame(m.getBuild(), j1.getString("build"))) {
+
+                File f = _download(url, j1.getString("uri"), j1.getString("md5"));
+                if (f != null) {
+
+                  OpLog.info(autoupgrade.class, "download", f.getName(), null, upgradeurl);
+
+                  String name = j1.getString("uri");
+                  int i = name.lastIndexOf("/");
+                  name = name.substring(i + 1);
+                  if (_upgrade(name, f)) {
+                    restart = true;
+                  }
+                } else {
+                  // download error
+                  interval = X.AMINUTE;
+                }
+              } else {
+                OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null,
+                    upgradeurl);
+              }
             }
           } else {
             OpLog.warn(autoupgrade.class, "check", "[" + s + "], got=" + r.body, null, upgradeurl);
