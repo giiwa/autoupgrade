@@ -131,7 +131,7 @@ public class AutoupgradeListener implements IListener {
           JSON j1 = JSON.fromObject(r.body);
           if (j1 != null && j1.getInt(X.STATE) == 200) {
 
-            if (X.isSame("*", j1.getString("name"))) {
+            if (j1.has("list")) {
               List<JSON> list = j1.getList("list");
               for (JSON j2 : list) {
 
