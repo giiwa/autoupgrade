@@ -95,14 +95,15 @@ public class AutoupgradeListener implements IListener {
 
   private static class AutoupdateTask extends Task {
 
-    long interval = X.AHOUR;
+    long   interval = X.AHOUR;
+    String upgradeurl;
 
     @Override
     public void onExecute() {
       interval = X.AHOUR;
 
       String modules = Global.getString("autoupgrade." + Model.node() + ".modules", null);
-      String upgradeurl = Global.getString("autoupgrade.url", null);
+      upgradeurl = Global.getString("autoupgrade.url", null);
       String url = upgradeurl;
       if (!X.isEmpty(url) && !X.isEmpty(modules)) {
         while (url.startsWith("/")) {
@@ -134,54 +135,13 @@ public class AutoupgradeListener implements IListener {
             if (j1.has("list")) {
               List<JSON> list = j1.getList("list");
               for (JSON j2 : list) {
-
-                Module m = Module.load(j2.getString("name"));
-                if (m == null || !X.isSame(m.getVersion(), j2.getString("version"))
-                    || !X.isSame(m.getBuild(), j2.getString("build"))) {
-
-                  File f = _download(url, j2.getString("uri"), j2.getString("md5"));
-                  if (f != null) {
-
-                    OpLog.info(autoupgrade.class, "download", f.getName(), null, upgradeurl);
-
-                    String name = j2.getString("uri");
-                    int i = name.lastIndexOf("/");
-                    name = name.substring(i + 1);
-                    if (_upgrade(name, f)) {
-                      restart = true;
-                    }
-                  } else {
-                    // download error
-                    interval = X.AMINUTE;
-                  }
-                } else {
-                  OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null,
-                      upgradeurl);
+                if (_upgrade(url, j2)) {
+                  restart = true;
                 }
               }
             } else {
-              Module m = Module.load(s);
-              if (m == null || !X.isSame(m.getVersion(), j1.getString("version"))
-                  || !X.isSame(m.getBuild(), j1.getString("build"))) {
-
-                File f = _download(url, j1.getString("uri"), j1.getString("md5"));
-                if (f != null) {
-
-                  OpLog.info(autoupgrade.class, "download", f.getName(), null, upgradeurl);
-
-                  String name = j1.getString("uri");
-                  int i = name.lastIndexOf("/");
-                  name = name.substring(i + 1);
-                  if (_upgrade(name, f)) {
-                    restart = true;
-                  }
-                } else {
-                  // download error
-                  interval = X.AMINUTE;
-                }
-              } else {
-                OpLog.info(autoupgrade.class, "check", "[" + s + "], same build, ignore, remote=" + r.body, null,
-                    upgradeurl);
+              if (_upgrade(url, j1)) {
+                restart = true;
               }
             }
           } else {
@@ -194,6 +154,34 @@ public class AutoupgradeListener implements IListener {
           System.exit(0);
         }
       }
+    }
+
+    private boolean _upgrade(String url, JSON j1) {
+      String name = j1.getString("name");
+      Module m = Module.load(name);
+      if (m == null || !X.isSame(m.getVersion(), j1.getString("version"))
+          || !X.isSame(m.getBuild(), j1.getString("build"))) {
+
+        File f = _download(url, j1.getString("uri"), j1.getString("md5"));
+        if (f != null) {
+
+          OpLog.info(autoupgrade.class, "download", f.getName(), null, upgradeurl);
+
+          String uri = j1.getString("uri");
+          int i = uri.lastIndexOf("/");
+          uri = uri.substring(i + 1);
+          if (_upgrade(uri, f)) {
+            return true;
+          }
+        } else {
+          // download error
+          interval = X.AMINUTE;
+        }
+      } else {
+        OpLog.info(autoupgrade.class, "check", "[" + name + "], same build, ignore", null, upgradeurl);
+      }
+
+      return false;
     }
 
     private boolean _upgrade(String name, File f) {
