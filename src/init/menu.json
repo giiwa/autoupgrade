@@ -4,7 +4,7 @@
 						name : 'menu.system',
 						childs : [{
 									name : 'menu.autoupgrade',
-									load : '/admin/autoupgrade',
+									load : '/admin/autoupgrade/setting',
 									access : 'access.config.admin',
 									seq : 1010,
 									classes : 'icon-cloud-download'
