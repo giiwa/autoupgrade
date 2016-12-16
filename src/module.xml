@@ -5,17 +5,11 @@
   <name>autoupgrade</name>
   <package>org.giiwa.autoupgrade.web</package>
   <screenshot>/images/autoupgrade_screenshot.png</screenshot>
-  <version>1.0.1</version>
+  <version>1.0</version>
   <build>0</build>
   <enabled>true</enabled>
   <readme>autoupgrade module</readme>
   <listener>
     <class>org.giiwa.autoupgrade.web.AutoupgradeListener</class>
   </listener>
-  <setting>
-  </setting>
-  <filter>
-  </filter>
-  <depends>
-  </depends>
 </module>
