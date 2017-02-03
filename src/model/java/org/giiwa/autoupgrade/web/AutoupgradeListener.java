@@ -126,7 +126,7 @@ public class AutoupgradeListener implements IListener {
             continue;
           JSON jo = JSON.create();
           jo.put("name", s);
-          Response r = Http.post(url, jo);
+          Response r = Http.owner.post(url, jo);
           log.info("remote module=" + s + ", resp=" + r.body);
 
           JSON j1 = JSON.fromObject(r.body);
@@ -206,7 +206,7 @@ public class AutoupgradeListener implements IListener {
       File f = t.getFile();
 
       // System.out.println("url=" + url);
-      int len = Http.download(url, f);
+      int len = Http.owner.download(url, f);
       if (len > 0) {
         String m1 = MD5.md5(f);
         if (X.isSame(md5, m1)) {
