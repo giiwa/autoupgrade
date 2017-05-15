@@ -187,7 +187,7 @@ public class AutoupgradeListener implements IListener {
     private boolean _upgrade(String name, File f) {
       try {
         String id = Repo.store(name, f);
-        boolean restart = Module.install(Repo.load(id));
+        boolean restart = Module.prepare(Repo.load(id));
         OpLog.info(autoupgrade.class, "upgrade", "success, name=" + name, null, null);
         return restart;
       } catch (Exception e) {
@@ -236,13 +236,12 @@ public class AutoupgradeListener implements IListener {
    */
   public static void main(String[] args) {
     try {
-      System.setProperty("home", "/Users/wujun/d/giiwa/");
 
       /**
        * initialize the configuration
        */
-      Config.init("home", "giiwa");
-      Temp.init(Config.getConfig());
+      Config.init("/Users/wujun/d/giiwa/giiwa.properties");
+      Temp.init(Config.getConf());
       AutoupdateTask t = new AutoupdateTask();
       String url = "http://giiwa.org/admin/module/query";
       String repo = "/repo/erjfpyvz3qqjz/thirdlogin_1.0.1_1609070812.zip";
